@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: taxas_turismo
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: senha123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://postgres:26e98b95bfeed5693b87@painel.spemm.net:5430/taxas_turismo?sslmode=disable
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
