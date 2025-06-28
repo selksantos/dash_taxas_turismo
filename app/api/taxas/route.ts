@@ -11,6 +11,11 @@ async function calcularFaixasEtarias(whereClause: Record<string, unknown>) {
     }
   });
 
+  // Se não há dados, retornar array vazio
+  if (dados.length === 0) {
+    return [];
+  }
+
   const faixas = {
     '0-17': { _sum: { quantidadeTaxa: 0, totalTaxa: 0 } },
     '18-30': { _sum: { quantidadeTaxa: 0, totalTaxa: 0 } },
