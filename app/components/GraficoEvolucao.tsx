@@ -3,6 +3,7 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { EmptyChart } from './EmptyChart';
 
 interface DadosEvolucao {
   data: string;
@@ -42,7 +43,17 @@ export function GraficoEvolucao({ dados }: Props) {
         </svg>
         Evolução de Taxa por Data
       </h2>
-      <ResponsiveContainer width="100%" height={300}>
+      {dados.length === 0 ? (
+        <EmptyChart 
+          message="Nenhum dado disponível para o período selecionado"
+          icon={
+            <svg className="w-12 h-12 mb-4 text-purple-400 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+            </svg>
+          }
+        />
+      ) : (
+        <ResponsiveContainer width="100%" height={300}>
         <LineChart data={dadosFormatados} margin={{ top: 5, right: 80, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
           <XAxis dataKey="data" stroke="#9CA3AF" />
@@ -79,6 +90,7 @@ export function GraficoEvolucao({ dados }: Props) {
           />
         </LineChart>
       </ResponsiveContainer>
+      )}
     </div>
   );
 }

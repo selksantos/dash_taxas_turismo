@@ -1,6 +1,7 @@
 'use client';
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { EmptyChart } from './EmptyChart';
 
 interface DadosEstado {
   estado: string;
@@ -33,10 +34,23 @@ export function GraficoPorEstado({ dados }: Props) {
   if (dadosFormatados.length === 0) {
     return (
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h2 className="text-xl font-semibold mb-4 text-white">Top 10 Estados Brasileiros</h2>
-        <div className="flex items-center justify-center h-[300px] text-gray-400">
-          <p>Nenhum dado disponível para estados brasileiros</p>
-        </div>
+        <h2 className="text-xl font-semibold mb-4 text-white flex items-center gap-2">
+          <svg className="w-6 h-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Top 10 Estados Brasileiros
+        </h2>
+        <EmptyChart 
+          height={400}
+          message="Nenhum dado disponível para estados brasileiros"
+          icon={
+            <svg className="w-12 h-12 mb-4 text-green-400 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          }
+        />
       </div>
     );
   }
