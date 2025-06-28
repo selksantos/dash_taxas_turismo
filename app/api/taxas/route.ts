@@ -100,8 +100,6 @@ export async function GET(request: NextRequest) {
       take: 10 // Top 10 países
     });
     
-    console.log('DEBUG - Dados porPais (primeiros 3 registros):', porPais.slice(0, 3));
-    
     // Query por estado
     const porEstado = await prisma.dashboard.groupBy({
       by: ['estado'],
@@ -117,8 +115,6 @@ export async function GET(request: NextRequest) {
       },
       take: 10 // Top 10 estados brasileiros
     });
-    
-    console.log('DEBUG - Dados porEstado (primeiros 3 registros):', porEstado.slice(0, 3));
 
     const dadosAgregados = {
       porFaixaEtaria: await calcularFaixasEtarias(whereClause),
@@ -156,9 +152,6 @@ export async function GET(request: NextRequest) {
         totalTaxa: item._sum.totalTaxa?.toNumber() || 0
       }))
     };
-    
-    console.log('DEBUG - Formato final dadosAgregados.porPais:', dadosAgregados.porPais.slice(0, 3));
-    console.log('DEBUG - Formato final dadosAgregados.porEstado:', dadosAgregados.porEstado.slice(0, 3));
 
     return NextResponse.json(dadosAgregados);
   } catch (error) {

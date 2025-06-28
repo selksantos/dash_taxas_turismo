@@ -15,15 +15,11 @@ interface Props {
 }
 
 export function GraficoPorEstado({ dados }: Props) {
-  console.log('DEBUG GraficoPorEstado - dados recebidos:', dados.slice(0, 3));
-  
   const dadosFormatados = dados.map(item => ({
     estado: item.estado,
-    quantidade: item._sum.quantidadeTaxa || 0,
+    quantidade: Number(item._sum.quantidadeTaxa) || 0,
     total: Number(item._sum.totalTaxa) || 0
   })).sort((a, b) => b.total - a.total).slice(0, 10);
-  
-  console.log('DEBUG GraficoPorEstado - dados formatados:', dadosFormatados);
 
   const formatarMoeda = (valor: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -50,18 +46,25 @@ export function GraficoPorEstado({ dados }: Props) {
       <h2 className="text-xl font-semibold mb-4 text-white">Top 10 Estados Brasileiros</h2>
       <ResponsiveContainer width="100%" height={400}>
         <BarChart 
-          data={dadosFormatados} 
-          layout="horizontal"
-          margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
+          data={dadosFormatados}
+          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-          <XAxis type="number" stroke="#9CA3AF" />
-          <YAxis 
+          <XAxis 
             dataKey="estado" 
-            type="category" 
-            stroke="#9CA3AF" 
-            width={40}
-            tick={{ fontSize: 12 }}
+            stroke="#9CA3AF"
+          />
+          <YAxis 
+            yAxisId="left"
+            orientation="left"
+            stroke="#10B981"
+            tickFormatter={(value) => value.toLocaleString('pt-BR')}
+          />
+          <YAxis 
+            yAxisId="right"
+            orientation="right"
+            stroke="#3B82F6"
+            tickFormatter={formatarMoeda}
           />
           <Tooltip 
             contentStyle={{ 
@@ -78,8 +81,8 @@ export function GraficoPorEstado({ dados }: Props) {
             }}
           />
           <Legend />
-          <Bar dataKey="quantidade" fill="#10B981" name="Quantidade" />
-          <Bar dataKey="total" fill="#3B82F6" name="Valor Total" />
+          <Bar yAxisId="left" dataKey="quantidade" fill="#10B981" name="Quantidade" />
+          <Bar yAxisId="right" dataKey="total" fill="#3B82F6" name="Valor Total" />
         </BarChart>
       </ResponsiveContainer>
     </div>

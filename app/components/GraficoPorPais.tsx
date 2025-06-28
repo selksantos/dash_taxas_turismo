@@ -15,15 +15,11 @@ interface Props {
 }
 
 export function GraficoPorPais({ dados }: Props) {
-  console.log('DEBUG GraficoPorPais - dados recebidos:', dados.slice(0, 3));
-  
   const dadosFormatados = dados.map(item => ({
     pais: item.pais,
-    quantidade: item._sum.quantidadeTaxa || 0,
+    quantidade: Number(item._sum.quantidadeTaxa) || 0,
     total: Number(item._sum.totalTaxa) || 0
   }));
-  
-  console.log('DEBUG GraficoPorPais - dados formatados:', dadosFormatados.slice(0, 3));
 
   const formatarMoeda = (valor: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -49,7 +45,18 @@ export function GraficoPorPais({ dados }: Props) {
             height={100}
             interval={0}
           />
-          <YAxis stroke="#9CA3AF" />
+          <YAxis 
+            yAxisId="left" 
+            orientation="left"
+            stroke="#9CA3AF" 
+            tickFormatter={(value) => value.toLocaleString('pt-BR')}
+          />
+          <YAxis 
+            yAxisId="right" 
+            orientation="right"
+            stroke="#9CA3AF" 
+            tickFormatter={formatarMoeda}
+          />
           <Tooltip 
             contentStyle={{ 
               backgroundColor: '#1F2937',
@@ -68,8 +75,8 @@ export function GraficoPorPais({ dados }: Props) {
           <Legend 
             wrapperStyle={{ paddingTop: '20px' }}
           />
-          <Bar dataKey="quantidade" fill="#3B82F6" name="Quantidade" />
-          <Bar dataKey="total" fill="#10B981" name="Valor Total" />
+          <Bar yAxisId="left" dataKey="quantidade" fill="#3B82F6" name="Quantidade" />
+          <Bar yAxisId="right" dataKey="total" fill="#10B981" name="Valor Total" />
         </BarChart>
       </ResponsiveContainer>
     </div>
