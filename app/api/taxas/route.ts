@@ -62,12 +62,27 @@ export async function GET(request: NextRequest) {
       };
     }
 
-    const dados = await prisma.dashboard.findMany({
+    // Agregar dados por data para evitar problemas de performance
+    const dadosPorData = await prisma.dashboard.groupBy({
+      by: ['dataPasseio'],
       where: whereClause,
+      _sum: {
+        quantidadeTaxa: true,
+        totalTaxa: true
+      },
       orderBy: {
         dataPasseio: 'asc'
       }
     });
+
+    // Filtrar apenas estados brasileiros (não 'N/A')
+    const whereClauseEstadosBrasil = {
+      ...whereClause,
+      estado: {
+        not: 'N/A'
+      },
+      pais: 'Brasil'
+    };
 
     const dadosAgregados = {
       porFaixaEtaria: await calcularFaixasEtarias(whereClause),
@@ -79,18 +94,38 @@ export async function GET(request: NextRequest) {
           totalTaxa: true
         }
       }),
-      porEstado: await prisma.dashboard.groupBy({
-        by: ['estado'],
+      porPais: await prisma.dashboard.groupBy({
+        by: ['pais'],
         where: whereClause,
         _sum: {
           quantidadeTaxa: true,
           totalTaxa: true
-        }
+        },
+        orderBy: {
+          _sum: {
+            totalTaxa: 'desc'
+          }
+        },
+        take: 10 // Top 10 países
       }),
-      evolucaoPorData: dados.map(item => ({
+      porEstado: await prisma.dashboard.groupBy({
+        by: ['estado'],
+        where: whereClauseEstadosBrasil,
+        _sum: {
+          quantidadeTaxa: true,
+          totalTaxa: true
+        },
+        orderBy: {
+          _sum: {
+            totalTaxa: 'desc'
+          }
+        },
+        take: 10 // Top 10 estados brasileiros
+      }),
+      evolucaoPorData: dadosPorData.map(item => ({
         data: item.dataPasseio,
-        quantidadeTaxa: item.quantidadeTaxa,
-        totalTaxa: item.totalTaxa.toNumber()
+        quantidadeTaxa: item._sum.quantidadeTaxa || 0,
+        totalTaxa: item._sum.totalTaxa?.toNumber() || 0
       }))
     };
 

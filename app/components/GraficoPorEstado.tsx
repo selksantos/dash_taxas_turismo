@@ -23,7 +23,7 @@ export function GraficoPorEstado({ dados }: Props) {
 
   return (
     <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-      <h2 className="text-xl font-semibold mb-4 text-white">Top 10 Estados</h2>
+      <h2 className="text-xl font-semibold mb-4 text-white">Top 10 Estados Brasileiros</h2>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={dadosFormatados} layout="horizontal">
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />

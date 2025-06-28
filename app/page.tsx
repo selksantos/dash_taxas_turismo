@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { GraficoPorFaixaEtaria } from './components/GraficoPorFaixaEtaria';
 import { GraficoPorSexo } from './components/GraficoPorSexo';
 import { GraficoPorEstado } from './components/GraficoPorEstado';
+import { GraficoPorPais } from './components/GraficoPorPais';
 import { GraficoEvolucao } from './components/GraficoEvolucao';
 import { FiltroData } from './components/FiltroData';
 
@@ -11,6 +12,7 @@ interface DadosAgregados {
   faixaEtaria?: string;
   sexo?: string;
   estado?: string;
+  pais?: string;
   _sum: {
     quantidadeTaxa: number | null;
     totalTaxa: number | null;
@@ -27,6 +29,7 @@ interface DadosAPI {
   porFaixaEtaria: DadosAgregados[];
   porSexo: DadosAgregados[];
   porEstado: DadosAgregados[];
+  porPais: DadosAgregados[];
   evolucaoPorData: DadosEvolucao[];
 }
 
@@ -98,11 +101,14 @@ export default function Home() {
         
         <FiltroData onFiltrar={handleFiltrar} />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="lg:col-span-2">
+            <GraficoEvolucao dados={dados.evolucaoPorData} />
+          </div>
+          <GraficoPorPais dados={dados.porPais || []} />
+          <GraficoPorEstado dados={dados.porEstado} />
           <GraficoPorFaixaEtaria dados={dados.porFaixaEtaria} />
           <GraficoPorSexo dados={dados.porSexo} />
-          <GraficoPorEstado dados={dados.porEstado} />
-          <GraficoEvolucao dados={dados.evolucaoPorData} />
         </div>
       </div>
     </main>
