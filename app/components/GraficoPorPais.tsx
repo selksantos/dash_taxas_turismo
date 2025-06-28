@@ -32,7 +32,10 @@ export function GraficoPorPais({ dados }: Props) {
     <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
       <h2 className="text-xl font-semibold mb-4 text-white">Top 10 Países</h2>
       <ResponsiveContainer width="100%" height={400}>
-        <BarChart data={dadosFormatados}>
+        <BarChart 
+          data={dadosFormatados}
+          margin={{ top: 20, right: 30, left: 40, bottom: 80 }}
+        >
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
           <XAxis 
             dataKey="pais" 
@@ -40,28 +43,30 @@ export function GraficoPorPais({ dados }: Props) {
             angle={-45}
             textAnchor="end"
             height={100}
+            interval={0}
           />
           <YAxis stroke="#9CA3AF" />
           <Tooltip 
             contentStyle={{ 
               backgroundColor: '#1F2937',
               border: '1px solid #374151',
-              borderRadius: '0.375rem'
+              borderRadius: '0.375rem',
+              color: '#F3F4F6'
             }}
             formatter={(value: number, name: string) => {
-              if (name === 'total') {
+              if (name === 'Valor Total') {
                 return formatarMoeda(value);
               }
-              return value;
+              return value.toLocaleString('pt-BR');
             }}
             labelFormatter={(label) => `País: ${label}`}
           />
           <Legend 
-            wrapperStyle={{ color: '#9CA3AF' }}
+            wrapperStyle={{ paddingTop: '20px' }}
             formatter={(value) => value === 'total' ? 'Valor Total' : 'Quantidade'}
           />
-          <Bar dataKey="quantidade" fill="#3B82F6" />
-          <Bar dataKey="total" fill="#10B981" />
+          <Bar dataKey="quantidade" fill="#3B82F6" name="Quantidade" />
+          <Bar dataKey="total" fill="#10B981" name="Valor Total" />
         </BarChart>
       </ResponsiveContainer>
     </div>
