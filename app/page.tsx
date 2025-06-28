@@ -72,18 +72,28 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // Carregar dados dos últimos 7 dias por padrão
-    const hoje = new Date();
-    const seteDiasAtras = new Date();
-    seteDiasAtras.setDate(hoje.getDate() - 7);
+    // Verificar se há filtro salvo no localStorage
+    const filtroSalvo = localStorage.getItem('dashboardFiltro');
     
-    const inicio = seteDiasAtras.toISOString().split('T')[0];
-    const fim = hoje.toISOString().split('T')[0];
-    
-    carregarDados(inicio, fim);
+    if (filtroSalvo) {
+      const { inicio, fim } = JSON.parse(filtroSalvo);
+      carregarDados(inicio, fim);
+    } else {
+      // Carregar dados dos últimos 7 dias por padrão
+      const hoje = new Date();
+      const seteDiasAtras = new Date();
+      seteDiasAtras.setDate(hoje.getDate() - 7);
+      
+      const inicio = seteDiasAtras.toISOString().split('T')[0];
+      const fim = hoje.toISOString().split('T')[0];
+      
+      carregarDados(inicio, fim);
+    }
   }, []);
 
   const handleFiltrar = (inicio: string, fim: string) => {
+    // Salvar filtro no localStorage
+    localStorage.setItem('dashboardFiltro', JSON.stringify({ inicio, fim }));
     carregarDados(inicio, fim);
   };
 
@@ -116,7 +126,7 @@ export default function Home() {
           )}
         </div>
         
-        <FiltroData onFiltrar={handleFiltrar} />
+        <FiltroData onFiltrar={handleFiltrar} periodoInicial={periodoAtual} />
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="lg:col-span-2">

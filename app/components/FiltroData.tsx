@@ -1,15 +1,45 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Props {
   onFiltrar: (inicio: string, fim: string) => void;
+  periodoInicial?: { inicio: string; fim: string };
 }
 
-export function FiltroData({ onFiltrar }: Props) {
+export function FiltroData({ onFiltrar, periodoInicial }: Props) {
   const [tipoFiltro, setTipoFiltro] = useState<'periodo' | 'personalizado'>('periodo');
   const [periodoSelecionado, setPeriodoSelecionado] = useState('semana');
+  const [dataInicio, setDataInicio] = useState(periodoInicial?.inicio || '');
+  const [dataFim, setDataFim] = useState(periodoInicial?.fim || '');
   const anoAtual = new Date().getFullYear();
+
+  // Detectar tipo de filtro baseado nas datas iniciais
+  useEffect(() => {
+    if (periodoInicial) {
+      const { inicio, fim } = periodoInicial;
+      const dataInicioObj = new Date(inicio);
+      const dataFimObj = new Date(fim);
+      
+      // Calcular diferença em dias
+      const diffTime = Math.abs(dataFimObj.getTime() - dataInicioObj.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      // Verificar se é um período predefinido
+      if (diffDays === 0 && inicio === fim) {
+        setTipoFiltro('periodo');
+        setPeriodoSelecionado('hoje');
+      } else if (diffDays === 6) {
+        setTipoFiltro('periodo');
+        setPeriodoSelecionado('semana');
+      } else {
+        // Período personalizado
+        setTipoFiltro('personalizado');
+        setDataInicio(inicio);
+        setDataFim(fim);
+      }
+    }
+  }, [periodoInicial]);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -137,6 +167,8 @@ export function FiltroData({ onFiltrar }: Props) {
               type="date"
               id="inicio"
               name="inicio"
+              value={dataInicio}
+              onChange={(e) => setDataInicio(e.target.value)}
               className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
@@ -149,6 +181,8 @@ export function FiltroData({ onFiltrar }: Props) {
               type="date"
               id="fim"
               name="fim"
+              value={dataFim}
+              onChange={(e) => setDataFim(e.target.value)}
               className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
