@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface Props {
   onFiltrar: (inicio: string, fim: string) => void;
@@ -14,13 +14,6 @@ export function FiltroData({ onFiltrar, periodoInicial }: Props) {
   const [dataFim, setDataFim] = useState(periodoInicial?.fim || '');
   const anoAtual = new Date().getFullYear();
 
-  // Atualizar datas quando mudar o período inicial
-  useEffect(() => {
-    if (periodoInicial) {
-      setDataInicio(periodoInicial.inicio);
-      setDataFim(periodoInicial.fim);
-    }
-  }, [periodoInicial]);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -31,6 +24,9 @@ export function FiltroData({ onFiltrar, periodoInicial }: Props) {
       
       if (inicio && fim) {
         onFiltrar(inicio, fim);
+        // Manter as datas nos campos
+        setDataInicio(inicio);
+        setDataFim(fim);
       }
     } else {
       const periodo = formData.get('periodo') as string;
@@ -73,6 +69,8 @@ export function FiltroData({ onFiltrar, periodoInicial }: Props) {
       
       if (inicio && fim) {
         onFiltrar(inicio, fim);
+        // Manter o período selecionado
+        setPeriodoSelecionado(periodo);
       }
     }
   };
