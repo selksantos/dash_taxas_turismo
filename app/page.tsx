@@ -7,6 +7,9 @@ import { GraficoPorEstado } from './components/GraficoPorEstado';
 import { GraficoPorPais } from './components/GraficoPorPais';
 import { GraficoEvolucao } from './components/GraficoEvolucao';
 import { FiltroData } from './components/FiltroData';
+import { LoadingAnimation } from './components/LoadingAnimation';
+import { ErrorDisplay } from './components/ErrorDisplay';
+import { EmptyState } from './components/EmptyState';
 
 interface DadosAgregados {
   faixaEtaria?: string;
@@ -71,27 +74,15 @@ export default function Home() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white text-2xl">Carregando dados...</div>
-      </div>
-    );
+    return <LoadingAnimation />;
   }
 
   if (error) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-red-500 text-2xl">Erro: {error}</div>
-      </div>
-    );
+    return <ErrorDisplay error={error} onRetry={() => carregarDados()} />;
   }
 
   if (!dados) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white text-2xl">Nenhum dado disponível</div>
-      </div>
-    );
+    return <EmptyState />;
   }
 
   return (
