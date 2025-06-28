@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { GraficoPorFaixaEtaria } from './components/GraficoPorFaixaEtaria';
 import { GraficoPorSexo } from './components/GraficoPorSexo';
 import { GraficoPorEstado } from './components/GraficoPorEstado';
@@ -103,7 +104,16 @@ export default function Home() {
     <main className="min-h-screen bg-gray-900 p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-white">Dashboard de Taxas de Turismo</h1>
+          <div className="flex items-center gap-4">
+            <Image 
+              src="/images/brasao_ilha_grande.png" 
+              alt="Brasão de Ilha Grande" 
+              width={60} 
+              height={60}
+              className="object-contain"
+            />
+            <h1 className="text-4xl font-bold text-white">Dashboard de Taxas de Turismo</h1>
+          </div>
           {periodoAtual && (
             <div className="text-sm text-gray-400">
               <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-800 rounded-lg">
