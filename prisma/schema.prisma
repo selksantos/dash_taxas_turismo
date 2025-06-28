@@ -18,9 +18,10 @@ model Dashboard {
   pais            String
   estado          String
   sexo            String
-  faixaEtaria     String
+  dataNascimento  DateTime @db.Date
   quantidadeTaxa  Int
   totalTaxa       Decimal  @db.Decimal(10, 2)
-  data            DateTime
+  dataPasseio     DateTime @db.Date
+  dataCompra      DateTime @db.Date
   criadoEm        DateTime @default(now())
 }

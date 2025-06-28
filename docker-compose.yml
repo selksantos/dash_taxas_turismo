@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   db:
     image: postgres:15
@@ -15,8 +14,8 @@ services:
     build: .
     ports:
       - "3000:3000"
-    environment:
-      DATABASE_URL: postgres://postgres:26e98b95bfeed5693b87@painel.spemm.net:5430/taxas_turismo?sslmode=disable
+    env_file:
+      - .env
     depends_on:
       - db
 
