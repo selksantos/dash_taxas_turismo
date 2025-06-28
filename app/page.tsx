@@ -108,8 +108,8 @@ export default function Home() {
             <Image 
               src="/images/brasao_ilha_grande.png" 
               alt="Brasão de Ilha Grande" 
-              width={80} 
-              height={80}
+              width={100} 
+              height={100}
               className="object-contain"
             />
             <h1 className="text-4xl font-bold text-white">Dashboard de Taxas de Turismo</h1>
