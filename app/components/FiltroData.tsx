@@ -18,11 +18,11 @@ export function FiltroData({ onFiltrar }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
-      <h2 className="text-xl font-semibold mb-4 text-white">Filtrar por Período</h2>
+      <h2 className="text-xl font-semibold mb-4 text-white">Filtrar por Período do Passeio</h2>
       <div className="flex gap-4 items-end">
         <div className="flex-1">
           <label htmlFor="inicio" className="block text-sm font-medium text-gray-300 mb-2">
-            Data Inicial
+            Data Inicial do Passeio
           </label>
           <input
             type="date"
@@ -34,7 +34,7 @@ export function FiltroData({ onFiltrar }: Props) {
         </div>
         <div className="flex-1">
           <label htmlFor="fim" className="block text-sm font-medium text-gray-300 mb-2">
-            Data Final
+            Data Final do Passeio
           </label>
           <input
             type="date"

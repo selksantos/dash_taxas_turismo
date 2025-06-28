@@ -7,11 +7,27 @@ import { GraficoPorEstado } from './components/GraficoPorEstado';
 import { GraficoEvolucao } from './components/GraficoEvolucao';
 import { FiltroData } from './components/FiltroData';
 
+interface DadosAgregados {
+  faixaEtaria?: string;
+  sexo?: string;
+  estado?: string;
+  _sum: {
+    quantidadeTaxa: number | null;
+    totalTaxa: number | null;
+  };
+}
+
+interface DadosEvolucao {
+  data: string;
+  quantidadeTaxa: number;
+  totalTaxa: number;
+}
+
 interface DadosAPI {
-  porFaixaEtaria: any[];
-  porSexo: any[];
-  porEstado: any[];
-  evolucaoPorData: any[];
+  porFaixaEtaria: DadosAgregados[];
+  porSexo: DadosAgregados[];
+  porEstado: DadosAgregados[];
+  evolucaoPorData: DadosEvolucao[];
 }
 
 export default function Home() {
