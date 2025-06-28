@@ -72,28 +72,18 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // Verificar se há filtro salvo no localStorage
-    const filtroSalvo = localStorage.getItem('dashboardFiltro');
+    // Sempre carregar dados dos últimos 7 dias ao entrar no site
+    const hoje = new Date();
+    const seteDiasAtras = new Date();
+    seteDiasAtras.setDate(hoje.getDate() - 7);
     
-    if (filtroSalvo) {
-      const { inicio, fim } = JSON.parse(filtroSalvo);
-      carregarDados(inicio, fim);
-    } else {
-      // Carregar dados dos últimos 7 dias por padrão
-      const hoje = new Date();
-      const seteDiasAtras = new Date();
-      seteDiasAtras.setDate(hoje.getDate() - 7);
-      
-      const inicio = seteDiasAtras.toISOString().split('T')[0];
-      const fim = hoje.toISOString().split('T')[0];
-      
-      carregarDados(inicio, fim);
-    }
+    const inicio = seteDiasAtras.toISOString().split('T')[0];
+    const fim = hoje.toISOString().split('T')[0];
+    
+    carregarDados(inicio, fim);
   }, []);
 
   const handleFiltrar = (inicio: string, fim: string) => {
-    // Salvar filtro no localStorage
-    localStorage.setItem('dashboardFiltro', JSON.stringify({ inicio, fim }));
     carregarDados(inicio, fim);
   };
 

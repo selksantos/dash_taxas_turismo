@@ -14,30 +14,11 @@ export function FiltroData({ onFiltrar, periodoInicial }: Props) {
   const [dataFim, setDataFim] = useState(periodoInicial?.fim || '');
   const anoAtual = new Date().getFullYear();
 
-  // Detectar tipo de filtro baseado nas datas iniciais
+  // Atualizar datas quando mudar o período inicial
   useEffect(() => {
     if (periodoInicial) {
-      const { inicio, fim } = periodoInicial;
-      const dataInicioObj = new Date(inicio);
-      const dataFimObj = new Date(fim);
-      
-      // Calcular diferença em dias
-      const diffTime = Math.abs(dataFimObj.getTime() - dataInicioObj.getTime());
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      
-      // Verificar se é um período predefinido
-      if (diffDays === 0 && inicio === fim) {
-        setTipoFiltro('periodo');
-        setPeriodoSelecionado('hoje');
-      } else if (diffDays === 6) {
-        setTipoFiltro('periodo');
-        setPeriodoSelecionado('semana');
-      } else {
-        // Período personalizado
-        setTipoFiltro('personalizado');
-        setDataInicio(inicio);
-        setDataFim(fim);
-      }
+      setDataInicio(periodoInicial.inicio);
+      setDataFim(periodoInicial.fim);
     }
   }, [periodoInicial]);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
