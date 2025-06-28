@@ -8,6 +8,7 @@ interface Props {
 
 export function FiltroData({ onFiltrar }: Props) {
   const [tipoFiltro, setTipoFiltro] = useState<'periodo' | 'personalizado'>('periodo');
+  const [periodoSelecionado, setPeriodoSelecionado] = useState('semana');
   const anoAtual = new Date().getFullYear();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -103,6 +104,8 @@ export function FiltroData({ onFiltrar }: Props) {
             <select
               id="periodo"
               name="periodo"
+              value={periodoSelecionado}
+              onChange={(e) => setPeriodoSelecionado(e.target.value)}
               className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
