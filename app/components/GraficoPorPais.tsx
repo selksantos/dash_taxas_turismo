@@ -15,11 +15,15 @@ interface Props {
 }
 
 export function GraficoPorPais({ dados }: Props) {
+  console.log('DEBUG GraficoPorPais - dados recebidos:', dados.slice(0, 3));
+  
   const dadosFormatados = dados.map(item => ({
     pais: item.pais,
     quantidade: item._sum.quantidadeTaxa || 0,
-    total: item._sum.totalTaxa || 0
+    total: Number(item._sum.totalTaxa) || 0
   }));
+  
+  console.log('DEBUG GraficoPorPais - dados formatados:', dadosFormatados.slice(0, 3));
 
   const formatarMoeda = (valor: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -63,7 +67,6 @@ export function GraficoPorPais({ dados }: Props) {
           />
           <Legend 
             wrapperStyle={{ paddingTop: '20px' }}
-            formatter={(value) => value === 'total' ? 'Valor Total' : 'Quantidade'}
           />
           <Bar dataKey="quantidade" fill="#3B82F6" name="Quantidade" />
           <Bar dataKey="total" fill="#10B981" name="Valor Total" />

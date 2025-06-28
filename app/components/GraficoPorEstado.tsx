@@ -15,11 +15,15 @@ interface Props {
 }
 
 export function GraficoPorEstado({ dados }: Props) {
+  console.log('DEBUG GraficoPorEstado - dados recebidos:', dados.slice(0, 3));
+  
   const dadosFormatados = dados.map(item => ({
     estado: item.estado,
     quantidade: item._sum.quantidadeTaxa || 0,
-    total: item._sum.totalTaxa || 0
+    total: Number(item._sum.totalTaxa) || 0
   })).sort((a, b) => b.total - a.total).slice(0, 10);
+  
+  console.log('DEBUG GraficoPorEstado - dados formatados:', dadosFormatados);
 
   const formatarMoeda = (valor: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -73,9 +77,7 @@ export function GraficoPorEstado({ dados }: Props) {
               return value.toLocaleString('pt-BR');
             }}
           />
-          <Legend 
-            formatter={(value) => value === 'total' ? 'Valor Total' : 'Quantidade'}
-          />
+          <Legend />
           <Bar dataKey="quantidade" fill="#10B981" name="Quantidade" />
           <Bar dataKey="total" fill="#3B82F6" name="Valor Total" />
         </BarChart>

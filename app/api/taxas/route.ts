@@ -84,50 +84,81 @@ export async function GET(request: NextRequest) {
       pais: 'Brasil'
     };
 
+    // Query por país
+    const porPais = await prisma.dashboard.groupBy({
+      by: ['pais'],
+      where: whereClause,
+      _sum: {
+        quantidadeTaxa: true,
+        totalTaxa: true
+      },
+      orderBy: {
+        _sum: {
+          totalTaxa: 'desc'
+        }
+      },
+      take: 10 // Top 10 países
+    });
+    
+    console.log('DEBUG - Dados porPais (primeiros 3 registros):', porPais.slice(0, 3));
+    
+    // Query por estado
+    const porEstado = await prisma.dashboard.groupBy({
+      by: ['estado'],
+      where: whereClauseEstadosBrasil,
+      _sum: {
+        quantidadeTaxa: true,
+        totalTaxa: true
+      },
+      orderBy: {
+        _sum: {
+          totalTaxa: 'desc'
+        }
+      },
+      take: 10 // Top 10 estados brasileiros
+    });
+    
+    console.log('DEBUG - Dados porEstado (primeiros 3 registros):', porEstado.slice(0, 3));
+
     const dadosAgregados = {
       porFaixaEtaria: await calcularFaixasEtarias(whereClause),
-      porSexo: await prisma.dashboard.groupBy({
+      porSexo: (await prisma.dashboard.groupBy({
         by: ['sexo'],
         where: whereClause,
         _sum: {
           quantidadeTaxa: true,
           totalTaxa: true
         }
-      }),
-      porPais: await prisma.dashboard.groupBy({
-        by: ['pais'],
-        where: whereClause,
+      })).map(item => ({
+        ...item,
         _sum: {
-          quantidadeTaxa: true,
-          totalTaxa: true
-        },
-        orderBy: {
-          _sum: {
-            totalTaxa: 'desc'
-          }
-        },
-        take: 10 // Top 10 países
-      }),
-      porEstado: await prisma.dashboard.groupBy({
-        by: ['estado'],
-        where: whereClauseEstadosBrasil,
+          quantidadeTaxa: item._sum.quantidadeTaxa || 0,
+          totalTaxa: item._sum.totalTaxa?.toNumber() || 0
+        }
+      })),
+      porPais: porPais.map(item => ({
+        ...item,
         _sum: {
-          quantidadeTaxa: true,
-          totalTaxa: true
-        },
-        orderBy: {
-          _sum: {
-            totalTaxa: 'desc'
-          }
-        },
-        take: 10 // Top 10 estados brasileiros
-      }),
+          quantidadeTaxa: item._sum.quantidadeTaxa || 0,
+          totalTaxa: item._sum.totalTaxa?.toNumber() || 0
+        }
+      })),
+      porEstado: porEstado.map(item => ({
+        ...item,
+        _sum: {
+          quantidadeTaxa: item._sum.quantidadeTaxa || 0,
+          totalTaxa: item._sum.totalTaxa?.toNumber() || 0
+        }
+      })),
       evolucaoPorData: dadosPorData.map(item => ({
         data: item.dataPasseio,
         quantidadeTaxa: item._sum.quantidadeTaxa || 0,
         totalTaxa: item._sum.totalTaxa?.toNumber() || 0
       }))
     };
+    
+    console.log('DEBUG - Formato final dadosAgregados.porPais:', dadosAgregados.porPais.slice(0, 3));
+    console.log('DEBUG - Formato final dadosAgregados.porEstado:', dadosAgregados.porEstado.slice(0, 3));
 
     return NextResponse.json(dadosAgregados);
   } catch (error) {
