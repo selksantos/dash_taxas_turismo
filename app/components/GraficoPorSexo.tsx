@@ -1,6 +1,7 @@
 'use client';
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { EmptyChart } from './EmptyChart';
 
 interface DadosSexo {
   sexo: string;
@@ -24,7 +25,22 @@ export function GraficoPorSexo({ dados }: Props) {
 
   return (
     <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-      <h2 className="text-xl font-semibold mb-4 text-white">Distribuição por Sexo</h2>
+      <h2 className="text-xl font-semibold mb-4 text-white flex items-center gap-2">
+        <svg className="w-6 h-6 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+        Distribuição por Sexo
+      </h2>
+      {dados.length === 0 ? (
+        <EmptyChart 
+          message="Nenhum dado disponível por sexo"
+          icon={
+            <svg className="w-12 h-12 mb-4 text-pink-400 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          }
+        />
+      ) : (
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
@@ -48,6 +64,7 @@ export function GraficoPorSexo({ dados }: Props) {
           <Legend />
         </PieChart>
       </ResponsiveContainer>
+      )}
     </div>
   );
 }

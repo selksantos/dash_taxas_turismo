@@ -4,11 +4,16 @@ import { useState } from 'react';
 
 interface Props {
   onFiltrar: (inicio: string, fim: string) => void;
+  periodoInicial?: { inicio: string; fim: string };
 }
 
-export function FiltroData({ onFiltrar }: Props) {
+export function FiltroData({ onFiltrar, periodoInicial }: Props) {
   const [tipoFiltro, setTipoFiltro] = useState<'periodo' | 'personalizado'>('periodo');
+  const [periodoSelecionado, setPeriodoSelecionado] = useState('semana');
+  const [dataInicio, setDataInicio] = useState(periodoInicial?.inicio || '');
+  const [dataFim, setDataFim] = useState(periodoInicial?.fim || '');
   const anoAtual = new Date().getFullYear();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -19,6 +24,9 @@ export function FiltroData({ onFiltrar }: Props) {
       
       if (inicio && fim) {
         onFiltrar(inicio, fim);
+        // Manter as datas nos campos
+        setDataInicio(inicio);
+        setDataFim(fim);
       }
     } else {
       const periodo = formData.get('periodo') as string;
@@ -61,6 +69,8 @@ export function FiltroData({ onFiltrar }: Props) {
       
       if (inicio && fim) {
         onFiltrar(inicio, fim);
+        // Manter o período selecionado
+        setPeriodoSelecionado(periodo);
       }
     }
   };
@@ -103,6 +113,8 @@ export function FiltroData({ onFiltrar }: Props) {
             <select
               id="periodo"
               name="periodo"
+              value={periodoSelecionado}
+              onChange={(e) => setPeriodoSelecionado(e.target.value)}
               className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
@@ -134,6 +146,8 @@ export function FiltroData({ onFiltrar }: Props) {
               type="date"
               id="inicio"
               name="inicio"
+              value={dataInicio}
+              onChange={(e) => setDataInicio(e.target.value)}
               className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
@@ -146,6 +160,8 @@ export function FiltroData({ onFiltrar }: Props) {
               type="date"
               id="fim"
               name="fim"
+              value={dataFim}
+              onChange={(e) => setDataFim(e.target.value)}
               className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />

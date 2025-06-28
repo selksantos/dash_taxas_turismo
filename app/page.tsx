@@ -7,6 +7,9 @@ import { GraficoPorEstado } from './components/GraficoPorEstado';
 import { GraficoPorPais } from './components/GraficoPorPais';
 import { GraficoEvolucao } from './components/GraficoEvolucao';
 import { FiltroData } from './components/FiltroData';
+import { LoadingAnimation } from './components/LoadingAnimation';
+import { ErrorDisplay } from './components/ErrorDisplay';
+import { EmptyState } from './components/EmptyState';
 
 interface DadosAgregados {
   faixaEtaria?: string;
@@ -37,6 +40,7 @@ export default function Home() {
   const [dados, setDados] = useState<DadosAPI | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [periodoAtual, setPeriodoAtual] = useState<{ inicio: string; fim: string } | null>(null);
 
   const carregarDados = async (inicio?: string, fim?: string) => {
     try {
@@ -55,6 +59,11 @@ export default function Home() {
       
       const data = await response.json();
       setDados(data);
+      
+      // Atualizar período atual
+      if (inicio && fim) {
+        setPeriodoAtual({ inicio, fim });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro desconhecido');
     } finally {
@@ -63,7 +72,15 @@ export default function Home() {
   };
 
   useEffect(() => {
-    carregarDados();
+    // Sempre carregar dados dos últimos 7 dias ao entrar no site
+    const hoje = new Date();
+    const seteDiasAtras = new Date();
+    seteDiasAtras.setDate(hoje.getDate() - 7);
+    
+    const inicio = seteDiasAtras.toISOString().split('T')[0];
+    const fim = hoje.toISOString().split('T')[0];
+    
+    carregarDados(inicio, fim);
   }, []);
 
   const handleFiltrar = (inicio: string, fim: string) => {
@@ -71,35 +88,35 @@ export default function Home() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white text-2xl">Carregando dados...</div>
-      </div>
-    );
+    return <LoadingAnimation />;
   }
 
   if (error) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-red-500 text-2xl">Erro: {error}</div>
-      </div>
-    );
+    return <ErrorDisplay error={error} onRetry={() => carregarDados()} />;
   }
 
   if (!dados) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white text-2xl">Nenhum dado disponível</div>
-      </div>
-    );
+    return <EmptyState />;
   }
 
   return (
     <main className="min-h-screen bg-gray-900 p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-white mb-8">Dashboard de Taxas de Turismo</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold text-white">Dashboard de Taxas de Turismo</h1>
+          {periodoAtual && (
+            <div className="text-sm text-gray-400">
+              <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-800 rounded-lg">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                {new Date(periodoAtual.inicio).toLocaleDateString('pt-BR')} - {new Date(periodoAtual.fim).toLocaleDateString('pt-BR')}
+              </span>
+            </div>
+          )}
+        </div>
         
-        <FiltroData onFiltrar={handleFiltrar} />
+        <FiltroData onFiltrar={handleFiltrar} periodoInicial={periodoAtual} />
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="lg:col-span-2">
