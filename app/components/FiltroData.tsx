@@ -76,10 +76,10 @@ export function FiltroData({ onFiltrar, periodoInicial }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
-      <h2 className="text-xl font-semibold mb-4 text-white">Filtrar por Período do Passeio</h2>
+    <form onSubmit={handleSubmit} className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg mb-4 sm:mb-6">
+      <h2 className="text-lg sm:text-xl font-semibold mb-4 text-white">Filtrar por Período do Passeio</h2>
       
-      <div className="flex gap-4 mb-4">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4">
         <label className="flex items-center">
           <input
             type="radio"
@@ -89,7 +89,7 @@ export function FiltroData({ onFiltrar, periodoInicial }: Props) {
             onChange={(e) => setTipoFiltro(e.target.value as 'periodo' | 'personalizado')}
             className="mr-2"
           />
-          <span className="text-gray-300">Período Predefinido</span>
+          <span className="text-sm sm:text-base text-gray-300">Período Predefinido</span>
         </label>
         <label className="flex items-center">
           <input
@@ -100,14 +100,14 @@ export function FiltroData({ onFiltrar, periodoInicial }: Props) {
             onChange={(e) => setTipoFiltro(e.target.value as 'periodo' | 'personalizado')}
             className="mr-2"
           />
-          <span className="text-gray-300">Período Personalizado</span>
+          <span className="text-sm sm:text-base text-gray-300">Período Personalizado</span>
         </label>
       </div>
       
       {tipoFiltro === 'periodo' ? (
-        <div className="flex gap-4 items-end">
+        <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-end">
           <div className="flex-1">
-            <label htmlFor="periodo" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="periodo" className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
               Selecione o Período
             </label>
             <select
@@ -115,7 +115,7 @@ export function FiltroData({ onFiltrar, periodoInicial }: Props) {
               name="periodo"
               value={periodoSelecionado}
               onChange={(e) => setPeriodoSelecionado(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="hoje">Hoje</option>
@@ -131,15 +131,15 @@ export function FiltroData({ onFiltrar, periodoInicial }: Props) {
           </div>
           <button
             type="submit"
-            className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
+            className="px-4 sm:px-6 py-2 bg-blue-600 text-white text-sm sm:text-base font-medium rounded-md hover:bg-blue-700 transition-colors w-full sm:w-auto"
           >
             Filtrar
           </button>
         </div>
       ) : (
-        <div className="flex gap-4 items-end">
+        <div className="flex flex-col sm:flex-row gap-4 items-stretch">
           <div className="flex-1">
-            <label htmlFor="inicio" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="inicio" className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
               Data Inicial do Passeio
             </label>
             <input
@@ -148,12 +148,12 @@ export function FiltroData({ onFiltrar, periodoInicial }: Props) {
               name="inicio"
               value={dataInicio}
               onChange={(e) => setDataInicio(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
           <div className="flex-1">
-            <label htmlFor="fim" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="fim" className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
               Data Final do Passeio
             </label>
             <input
@@ -162,13 +162,13 @@ export function FiltroData({ onFiltrar, periodoInicial }: Props) {
               name="fim"
               value={dataFim}
               onChange={(e) => setDataFim(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
           <button
             type="submit"
-            className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
+            className="px-4 sm:px-6 py-2 bg-blue-600 text-white text-sm sm:text-base font-medium rounded-md hover:bg-blue-700 transition-colors w-full sm:w-auto sm:self-end"
           >
             Filtrar
           </button>
