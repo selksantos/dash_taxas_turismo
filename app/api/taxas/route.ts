@@ -55,15 +55,31 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const inicio = searchParams.get('inicio');
     const fim = searchParams.get('fim');
+    const pathPortal = searchParams.get('path_portal') || process.env.PATH_PORTAL;
 
-    let whereClause = {};
+    // Buscar a prefeitura pelo path_portal
+    const prefeitura = await prisma.prefeitura.findFirst({
+      where: {
+        path_portal: pathPortal,
+        ativo: true
+      }
+    });
+
+    if (!prefeitura) {
+      return NextResponse.json(
+        { error: 'Prefeitura não encontrada ou inativa' },
+        { status: 404 }
+      );
+    }
+
+    let whereClause: any = {
+      prefeitura_id: prefeitura.id_prefeitura
+    };
     
     if (inicio && fim) {
-      whereClause = {
-        dataPasseio: {
-          gte: new Date(inicio),
-          lte: new Date(fim)
-        }
+      whereClause.dataPasseio = {
+        gte: new Date(inicio),
+        lte: new Date(fim)
       };
     }
 
