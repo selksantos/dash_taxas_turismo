@@ -101,26 +101,28 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-900 p-8">
+    <main className="min-h-screen bg-gray-900 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-6 lg:mb-8 space-y-4 lg:space-y-0">
+          <div className="flex flex-col sm:flex-row items-center gap-4">
             <Image 
               src="/images/brasao_ilha_grande.png" 
               alt="Brasão de Ilha Grande" 
-              width={100} 
-              height={100}
-              className="object-contain"
+              width={80} 
+              height={80}
+              className="object-contain w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24"
             />
-            <h1 className="text-4xl font-bold text-white">Dashboard de Taxas de Turismo</h1>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white text-center sm:text-left">Dashboard de Taxas de Turismo</h1>
           </div>
           {periodoAtual && (
-            <div className="text-sm text-gray-400">
+            <div className="text-sm text-gray-400 flex justify-center lg:justify-end">
               <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-800 rounded-lg">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                {new Date(periodoAtual.inicio).toLocaleDateString('pt-BR')} - {new Date(periodoAtual.fim).toLocaleDateString('pt-BR')}
+                <span className="whitespace-nowrap">
+                  {new Date(periodoAtual.inicio).toLocaleDateString('pt-BR')} - {new Date(periodoAtual.fim).toLocaleDateString('pt-BR')}
+                </span>
               </span>
             </div>
           )}
@@ -128,7 +130,7 @@ export default function Home() {
         
         <FiltroData onFiltrar={handleFiltrar} periodoInicial={periodoAtual} />
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           <div className="lg:col-span-2">
             <GraficoEvolucao dados={dados.evolucaoPorData} />
           </div>

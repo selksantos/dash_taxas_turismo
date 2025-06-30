@@ -2,6 +2,8 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { EmptyChart } from './EmptyChart';
+import { ResponsiveChartWrapper } from './ResponsiveChartWrapper';
+import { useState, useEffect } from 'react';
 
 interface DadosSexo {
   sexo: string;
@@ -18,19 +20,34 @@ interface Props {
 const COLORS = ['#3B82F6', '#EF4444', '#10B981'];
 
 export function GraficoPorSexo({ dados }: Props) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
   const dadosFormatados = dados.map(item => ({
     name: item.sexo,
     value: item._sum.quantidadeTaxa || 0
   }));
 
+  const chartIcon = (
+    <svg className="w-full h-full text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+  );
+
   return (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-      <h2 className="text-xl font-semibold mb-4 text-white flex items-center gap-2">
-        <svg className="w-6 h-6 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
-        Distribuição por Sexo
-      </h2>
+    <ResponsiveChartWrapper
+      title="Distribuição por Sexo"
+      icon={chartIcon}
+    >
       {dados.length === 0 ? (
         <EmptyChart 
           message="Nenhum dado disponível por sexo"
@@ -41,7 +58,7 @@ export function GraficoPorSexo({ dados }: Props) {
           }
         />
       ) : (
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={isMobile ? 250 : 300}>
         <PieChart>
           <Pie
             data={dadosFormatados}
@@ -49,7 +66,7 @@ export function GraficoPorSexo({ dados }: Props) {
             cy="50%"
             labelLine={false}
             label={(entry) => `${entry.name}: ${entry.value}`}
-            outerRadius={80}
+            outerRadius={isMobile ? 60 : 80}
             fill="#8884d8"
             dataKey="value"
           >
@@ -58,13 +75,20 @@ export function GraficoPorSexo({ dados }: Props) {
             ))}
           </Pie>
           <Tooltip 
-            contentStyle={{ backgroundColor: '#1F2937', border: 'none' }}
+            contentStyle={{ 
+              backgroundColor: '#1F2937', 
+              border: 'none',
+              fontSize: isMobile ? '12px' : '14px'
+            }}
             labelStyle={{ color: '#F3F4F6' }}
           />
-          <Legend />
+          <Legend 
+            wrapperStyle={{ fontSize: isMobile ? '12px' : '14px' }}
+            iconSize={isMobile ? 16 : 20}
+          />
         </PieChart>
       </ResponsiveContainer>
       )}
-    </div>
+    </ResponsiveChartWrapper>
   );
 }
