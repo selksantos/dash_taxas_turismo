@@ -10,7 +10,7 @@ RUN npm run build
 # Prod
 FROM node:20-slim
 WORKDIR /app
-RUN apt-get update -y && apt-get install -y openssl
+RUN apt-get update -y && apt-get install -y openssl netcat-openbsd
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public

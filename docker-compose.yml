@@ -5,19 +5,26 @@ services:
       POSTGRES_DB: taxas_turismo
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: senha123
-    ports:
-      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d taxas_turismo"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   app:
     build: .
     ports:
       - "3000:3000"
-    env_file:
-      - .env
+    environment:
+      DATABASE_URL: postgresql://admin:senha123@db:5432/taxas_turismo?schema=public
+      PATH_PORTAL: ilha-grande-pi
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    volumes:
+      - ./prisma:/app/prisma:ro
 
 volumes:
   pgdata:
