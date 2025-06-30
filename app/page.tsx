@@ -41,7 +41,7 @@ export default function Home() {
   const [dados, setDados] = useState<DadosAPI | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [periodoAtual, setPeriodoAtual] = useState<{ inicio: string; fim: string } | null>(null);
+  const [periodoAtual, setPeriodoAtual] = useState<{ inicio: string; fim: string } | undefined>(undefined);
 
   const carregarDados = async (inicio?: string, fim?: string) => {
     try {
