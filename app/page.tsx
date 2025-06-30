@@ -12,11 +12,32 @@ import { LoadingAnimation } from './components/LoadingAnimation';
 import { ErrorDisplay } from './components/ErrorDisplay';
 import { EmptyState } from './components/EmptyState';
 
-interface DadosAgregados {
-  faixaEtaria?: string;
-  sexo?: string;
-  estado?: string;
-  pais?: string;
+interface DadosFaixaEtaria {
+  faixaEtaria: string;
+  _sum: {
+    quantidadeTaxa: number | null;
+    totalTaxa: number | null;
+  };
+}
+
+interface DadosSexo {
+  sexo: string;
+  _sum: {
+    quantidadeTaxa: number | null;
+    totalTaxa: number | null;
+  };
+}
+
+interface DadosEstado {
+  estado: string;
+  _sum: {
+    quantidadeTaxa: number | null;
+    totalTaxa: number | null;
+  };
+}
+
+interface DadosPais {
+  pais: string;
   _sum: {
     quantidadeTaxa: number | null;
     totalTaxa: number | null;
@@ -30,10 +51,10 @@ interface DadosEvolucao {
 }
 
 interface DadosAPI {
-  porFaixaEtaria: DadosAgregados[];
-  porSexo: DadosAgregados[];
-  porEstado: DadosAgregados[];
-  porPais: DadosAgregados[];
+  porFaixaEtaria: DadosFaixaEtaria[];
+  porSexo: DadosSexo[];
+  porEstado: DadosEstado[];
+  porPais: DadosPais[];
   evolucaoPorData: DadosEvolucao[];
 }
 
