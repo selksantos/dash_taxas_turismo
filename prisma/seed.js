@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Iniciando seed do banco de dados...');
+  console.log(' Iniciando seed do banco de dados...');
   
   try {
     // Criar a prefeitura de Ilha Grande
@@ -19,11 +19,11 @@ async function main() {
       }
     });
     
-    console.log('✅ Prefeitura criada/atualizada:', prefeitura);
-    console.log('🎉 Seed concluído com sucesso!');
+    console.log(' Prefeitura criada/atualizada:', prefeitura);
+    console.log(' Seed concluído com sucesso!');
     
   } catch (error) {
-    console.error('❌ Erro durante o seed:', error);
+    console.error(' Erro durante o seed:', error);
     throw error;
   }
 }
